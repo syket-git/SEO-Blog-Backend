@@ -8,7 +8,7 @@ require('dotenv').config();
 
 //bring routes
 const blogRoute = require('./routes/blog');
-
+const authRoute = require('./routes/auth');
 //app
 const app = express();
 
@@ -19,7 +19,12 @@ app.use(cookieParser());
 
 //database
 mongoose
-  .connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: true,
+  })
   .then(() => console.log('DB Connected'))
   .catch((err) => console.log(err));
 
@@ -29,7 +34,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 //routes middleware
-app.use('/api/blog', blogRoute);
+app.use('/api', blogRoute);
+app.use('/api', authRoute);
 
 //route
 app.get('/', (req, res) => {

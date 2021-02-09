@@ -5,6 +5,6 @@ const router = express.Router();
 const { time } = require('../controllers/blog');
 
 //routes
-router.get('/', time);
+router.get('/blog', time);
 
 module.exports = router;
