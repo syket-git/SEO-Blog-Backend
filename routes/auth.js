@@ -5,6 +5,9 @@ const {
   signin,
   signout,
   requireSignin,
+  authMiddleware,
+  adminMiddleware,
+  read,
 } = require('../controllers/auth');
 
 //validation
@@ -18,5 +21,7 @@ const {
 router.post('/signup', userSignupValidation, runValidation, signup);
 router.post('/signin', userSigninValidation, runValidation, signin);
 router.get('/signout', signout);
+
+router.get('/secret', requireSignin, authMiddleware, read);
 
 module.exports = router;

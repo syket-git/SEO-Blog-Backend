@@ -4,6 +4,12 @@ const shortId = require('shortid');
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 
+//read profile
+exports.read = (req, res) => {
+  req.profile.hashed_password = undefined;
+  return res.json(req.profile);
+};
+
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -49,11 +55,9 @@ exports.signin = async (req, res) => {
 
   //create token
 
-  const token = jwt.sign(
-    { _id: authenticatedUser._id },
-    process.env.JWT_SECRET,
-    { expiresIn: '1d' }
-  );
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: '1d',
+  });
 
   //set cookie
   res.cookie('token', token, { expiresIn: '1d' });
@@ -71,6 +75,26 @@ exports.signout = (req, res) => {
 
 // Verify middleware
 exports.requireSignin = expressJwt({
-  secret: `${process.env.JWT_SECRET}`,
+  secret: process.env.JWT_SECRET,
   algorithms: ['HS256'],
 });
+
+//Auth Middleware
+
+exports.authMiddleware = async (req, res, next) => {
+  const user = await User.findById({ _id: req.user._id });
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  req.profile = user;
+  next();
+};
+
+//Admin Middleware
+exports.adminMiddleware = async (req, res, next) => {
+  const user = await User.findById({ _id: req.user._id });
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  if (user.role !== 1)
+    return res.status(404).json({ error: 'Admin resource. Access Denied' });
+
+  req.profile = user;
+  next();
+};

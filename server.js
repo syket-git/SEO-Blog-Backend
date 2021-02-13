@@ -3,19 +3,23 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const cors2 = require('cors');
 const cors = require('morgan');
 require('dotenv').config();
 
 //bring routes
 const blogRoute = require('./routes/blog');
 const authRoute = require('./routes/auth');
+const userRoute = require('./routes/user');
 //app
 const app = express();
 
 //middleware
 app.use(logger('combined'));
+app.use(cors2());
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(express.json());
 
 //database
 mongoose
@@ -36,6 +40,7 @@ if (process.env.NODE_ENV === 'development') {
 //routes middleware
 app.use('/api', blogRoute);
 app.use('/api', authRoute);
+app.use('/api', userRoute);
 
 //route
 app.get('/', (req, res) => {
