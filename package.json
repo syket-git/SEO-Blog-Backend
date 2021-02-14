@@ -22,6 +22,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15",
     "morgan": "^1.10.0",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "slugify": "^1.4.6"
   }
 }
