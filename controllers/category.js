@@ -26,6 +26,7 @@ exports.read = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   await CategorySchema.findOne({ slug }).exec((err, data) => {
     if (err) return res.status(404).json({ err: errorHandler(err) });
+    if (!data) return res.status(400).json({ error: 'Category not found' });
     res.json(data);
   });
 };
@@ -35,6 +36,7 @@ exports.remove = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   await CategorySchema.findOneAndRemove({ slug }).exec((err, data) => {
     if (err) return res.status(404).json({ err: errorHandler(err) });
+    if (!data) return res.status(400).json({ error: 'Category not found' });
     res.json({ message: 'Category deleted successfully' });
   });
 };
