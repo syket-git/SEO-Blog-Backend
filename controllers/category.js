@@ -9,14 +9,14 @@ exports.create = async (req, res) => {
   const category = new CategorySchema({ name, slug });
   await category.save((err, data) => {
     if (err) return res.status(404).json({ error: errorHandler(err) });
-    res.json(data);
+    res.json({ message: 'Category create successfully' });
   });
 };
 
 //List
 exports.list = async (req, res) => {
   await CategorySchema.find().exec((err, data) => {
-    if (err) return res.status(404).json({ err: errorHandler(err) });
+    if (err) return res.status(404).json({ error: errorHandler(err) });
     res.json(data);
   });
 };

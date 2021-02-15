@@ -9,7 +9,7 @@ exports.create = async (req, res) => {
   const tag = new tagSchema({ name, slug });
   await tag.save((err, data) => {
     if (err) return res.status(404).json({ error: errorHandler(err) });
-    res.json(data);
+    res.json({ message: 'Tag create successfully' });
   });
 };
 
