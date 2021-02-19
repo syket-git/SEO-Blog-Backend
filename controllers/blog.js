@@ -9,6 +9,7 @@ const { errorHandler } = require('../helpers/dbErrorHandler');
 const fs = require('fs');
 const { smartTrim } = require('../helpers/blog');
 
+//Create Blog
 exports.create = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
@@ -78,7 +79,7 @@ exports.create = (req, res) => {
           { new: true }
         ).exec((err, result) => {
           if (err) return res.status(400).json({ error: errorHandler(err) });
-          res.json(result);
+          res.json({ message: 'Blog create successfully' });
         });
       });
     });
