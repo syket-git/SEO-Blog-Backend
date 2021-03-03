@@ -221,3 +221,15 @@ exports.update = (req, res) => {
     });
   });
 };
+
+exports.photo = (req, res) => {
+  const slug = req.params.slug;
+  Blog.findOne({ slug })
+    .select('photo')
+    .exec((err, blog) => {
+      if (err || !blog)
+        return res.status(400).json({ error: errorHandler(err) });
+      res.set('Content-Type', blog.photo.contentType);
+      res.send(blog.photo.data);
+    });
+};
