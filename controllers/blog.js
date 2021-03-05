@@ -160,7 +160,7 @@ exports.listAllBlogsCategoriesTags = (req, res) => {
         tags = t; //Tags
 
         //Return all the blogs categories and tags
-        res.json({ blogs, categories, tags, size: limit });
+        res.json({ blogs, categories, tags, size: blogs.length });
       });
     });
 };

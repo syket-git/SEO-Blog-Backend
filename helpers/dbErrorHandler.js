@@ -21,8 +21,8 @@ const uniqueMessage = (error) => {
 exports.errorHandler = (error) => {
   let message = '';
 
-  if (error.code) {
-    switch (error.code) {
+  if (error?.code !== null) {
+    switch (error?.code) {
       case 11000:
       case 11001:
         message = uniqueMessage(error);
