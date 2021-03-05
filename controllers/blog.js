@@ -222,6 +222,8 @@ exports.update = (req, res) => {
   });
 };
 
+//Photo
+
 exports.photo = (req, res) => {
   const slug = req.params.slug;
   Blog.findOne({ slug })
@@ -231,5 +233,23 @@ exports.photo = (req, res) => {
         return res.status(400).json({ error: errorHandler(err) });
       res.set('Content-Type', blog.photo.contentType);
       res.send(blog.photo.data);
+    });
+};
+
+// Related Blogs
+
+exports.listRelated = (req, res) => {
+  const limit = req.body.limit ? parseInt(req.body.limit) : 3;
+  const { _id, categories } = req.body.blog;
+
+  console.log(_id);
+
+  Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
+    .limit(limit)
+    .populate('postedBy', '_id name profile')
+    .select('title slug excerpt postedBy createdAt updatedAt')
+    .exec((err, blogs) => {
+      if (err) return res.status(400).json({ error: 'Blogs not found!' });
+      res.json(blogs);
     });
 };
