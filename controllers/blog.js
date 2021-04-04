@@ -257,6 +257,7 @@ exports.listRelated = (req, res) => {
 //Blog Search
 
 exports.listSearch = (req, res) => {
+  console.log(req);
   const { search } = req.query;
   if (search) {
     Blog.find(
@@ -267,7 +268,11 @@ exports.listSearch = (req, res) => {
         ],
       },
       (err, blogs) => {
-        if (err) return res.status(400).json({ error: errorHandler(err) });
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
         res.json(blogs);
       }
     ).select('-photo -body');
